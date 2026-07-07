@@ -68,26 +68,14 @@ class WeatherService(restClientBuilder: RestClient.Builder) {
      * @param weatherCode 날씨코드
      * @return 카테고리 객체 반환
      */
-    private fun mapWeatherCode(weatherCode: Int?): WeatherCategory {
-        // 기본값
-        if (weatherCode == null) {
-            return WeatherCategory("맑음", "sunny, bright, clear sky, vibrant")
-        }
-        if (weatherCode in setOf(1, 2, 3)) {
-            return WeatherCategory("구름 조금/흐림", "cloudy, soft lighting, overcast")
-        }
-        if (weatherCode in setOf(45, 48)) {
-            return WeatherCategory("안개", "foggy, mysterious, misty, muted colors")
-        }
-        if (weatherCode in setOf(51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82)) {
-            return WeatherCategory("비", "rainy, wet streets, puddles, cinematic moody lighting, water drops")
-        }
-        if (weatherCode in setOf(71, 73, 75, 77, 85, 86)) {
-            return WeatherCategory("눈", "snowy, winter wonderland, falling snow, cold, cozy")
-        }
-        if (weatherCode in setOf(95, 96, 99)) {
-            return WeatherCategory("뇌우/폭풍", "stormy, lightning, dark dramatic clouds, heavy rain")
-        }
-        return WeatherCategory("맑음", "sunny, bright, clear sky, vibrant")
+    private fun mapWeatherCode(weatherCode: Int?): WeatherCategory = when (weatherCode) {
+        null -> WeatherCategory("맑음", "sunny, bright, clear sky, vibrant") // 기본값
+        in 1..3 -> WeatherCategory("구름 조금/흐림", "cloudy, soft lighting, overcast")
+        45, 48 -> WeatherCategory("안개", "foggy, mysterious, misty, muted colors")
+        51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82 ->
+            WeatherCategory("비", "rainy, wet streets, puddles, cinematic moody lighting, water drops")
+        71, 73, 75, 77, 85, 86 -> WeatherCategory("눈", "snowy, winter wonderland, falling snow, cold, cozy")
+        95, 96, 99 -> WeatherCategory("뇌우/폭풍", "stormy, lightning, dark dramatic clouds, heavy rain")
+        else -> WeatherCategory("맑음", "sunny, bright, clear sky, vibrant")
     }
 }

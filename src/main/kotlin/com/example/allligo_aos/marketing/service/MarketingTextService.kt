@@ -19,33 +19,19 @@ class MarketingTextService(chatClientBuilder: ChatClient.Builder) {
      */
     private fun buildWeatherContext(weather: WeatherInfo): String {
         // 날씨 정보를 가져왔을때 1이면 낮, null이거나 0이면 밤
-        val isDayStr = if (weather.isDay != null && weather.isDay == 1) "낮" else "밤"
+        val isDayStr = if (weather.isDay == 1) "낮" else "밤"
 
-        val context = StringBuilder()
+        return buildString {
+            append("현재 위치의 날씨는 '${weather.weatherDesc}'이며, 기온은 ${weather.temperature}도(체감 ${weather.apparentTemperature}도)입니다. ")
+            append("현재 시간대는 ${isDayStr}이며, 습도는 ${weather.humidity}%, 풍속은 ${weather.windSpeed}m/s입니다. ")
 
-        context.append(
-            "현재 위치의 날씨는 '%s'이며, 기온은 %s도(체감 %s도)입니다. "
-                .format(weather.weatherDesc, weather.temperature, weather.apparentTemperature)
-        )
-        context.append(
-            "현재 시간대는 %s이며, 습도는 %s%%, 풍속은 %sm/s입니다. "
-                .format(isDayStr, weather.humidity, weather.windSpeed)
-        )
+            // 비가 올 경우
+            if (weather.precipitation != null && weather.precipitation > 0) {
+                append("현재 강수량은 ${weather.precipitation} mm로 비나 눈이 내리고 있습니다. ")
+            }
 
-        // 비가 올 경우
-        if (weather.precipitation != null && weather.precipitation > 0) {
-            context.append(
-                "현재 강수량은 %s mm로 비나 눈이 내리고 있습니다. "
-                    .format(weather.precipitation)
-            )
+            append("이미지 프롬프트 작성 시 시각적 분위기 힌트(${weather.visualCue})와, 방금 말씀드린 날씨 정보를 적극 활용하여 현장감 있는 홍보물을 만드세요.")
         }
-
-        context.append(
-            "이미지 프롬프트 작성 시 시각적 분위기 힌트(%s)와, 방금 말씀드린 날씨 정보를 적극 활용하여 현장감 있는 홍보물을 만드세요."
-                .format(weather.visualCue)
-        )
-
-        return context.toString()
     }
 
     private fun buildVisionContext(vision: VisionAnalysis?): String {
@@ -53,18 +39,14 @@ class MarketingTextService(chatClientBuilder: ChatClient.Builder) {
             return ""
         }
 
+        // 각각 리스트로 받으므로 저 구분자를 통해 원소를 연속해서 받아 하나의 문자열로 주입함
         return """
-                - 주요 객체: %s
-                - 분위기: %s
-                - 주요 색상: %s
+                - 주요 객체: ${vision.objects.joinToString(", ")}
+                - 분위기: ${vision.mood.joinToString(", ")}
+                - 주요 색상: ${vision.colors.joinToString(", ")}
                 이 분석 결과를 바탕으로 새로운 마케팅 텍스트를 작성하세요.
 
-                """.trimIndent().format(
-            // 각각 리스트로 받으므로 저 구분자를 통해 원소를 연속해서 받아 하나의 문자열로 주입함
-            vision.objects.joinToString(", "),
-            vision.mood.joinToString(", "),
-            vision.colors.joinToString(", ")
-        )
+                """.trimIndent()
     }
 
     /**
@@ -81,12 +63,12 @@ class MarketingTextService(chatClientBuilder: ChatClient.Builder) {
         }
 
         return """
-            %s
+            $topPerformersContext
 
             아래의 [과거 우수 성과 게시물 레퍼런스]는 우리 매장에서 반응이 가장 좋았던 홍보물들입니다.
             이 텍스트들의 문체, 감성, 길이를 분석하고 모방하여 이번 타겟 시간대와 날씨에 맞는 새로운 홍보 텍스트를 작성해 주세요.
 
-            """.trimIndent().format(topPerformersContext)
+            """.trimIndent()
     }
 
     /**
