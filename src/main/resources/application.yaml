@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: All-Ligo_Aos
+
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        model: gemma4:latest
+        temperature: 0.7
+
+server:
+  port: 8083
