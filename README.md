@@ -96,7 +96,7 @@ flowchart TB
 | `GET /api/marketing/generate-text` | 날씨·비전·우수게시물 컨텍스트 기반 블로그용 홍보 텍스트 생성 | ✅ |
 | `GET /api/marketing/generate-video-text` | 숏폼 자막 + 이미지 프롬프트 3종 구조화 생성 | ✅ |
 | `POST /api/marketing/upload` | 생성된 영상 YouTube 업로드 | ⬜ |
-| `GET /api/system/status` | GPU/디스크/동시 작업 상태 조회 | ⬜ |
+| `GET /api/system/status` | GPU/디스크/동시 작업 상태 조회 | ✅ |
 
 ✅ 완료 · 🚧 진행 중 · ⬜ 예정
 
@@ -110,7 +110,7 @@ flowchart TB
 - [x] **Step 2** — 날씨 API (`RestClient`, Spring AI 무관)
 - [x] **Step 3** — 비전 분석 (멀티모달 `ChatClient` + `Media`)
 - [x] **Step 4** — 텍스트 생성 (`PromptTemplate` + 구조화 출력)
-- [ ] **Step 5** — 시스템 상태 + 코루틴/가상 스레드 기반 비동기 처리
+- [x] **Step 5** — 시스템 상태 API + 코루틴 기반 비동기 처리 (디스크/GPU 상태 동시 조회)
 - [ ] **Step 6** — Python GPU 워커 슬림화 + REST 계약 정의
 - [ ] **Step 7** — 이미지/영상 워커 연동 + S3 업로드
 - [ ] **Step 8** — YouTube 업로드 (OAuth2)
@@ -123,23 +123,27 @@ flowchart TB
 
 ## 📂 패키지 구조
 
-기능별로 `record` / `service` / `controller` 서브패키지를 나누는 컨벤션을 사용합니다. Java의 `record`는 Kotlin `data class`로 대응됩니다.
+기능별로 `dto` / `service` / `controller` 서브패키지를 나누는 컨벤션을 사용합니다. Java의 `record`에 대응하는 Kotlin `data class`를 담아두는 자리인데, `record`라는 이름 자체는 Kotlin에 없는 개념이라 오해를 줄 수 있어 `dto`(Data Transfer Object)로 통일했습니다.
 
 ```
 com.example.allligo_aos
 ├── chat/                  # Spring AI 학습용
 ├── config/                # OpenApiConfig 등
 ├── weather/
-│   ├── record/            # WeatherInfo, OpenMeteoResponse, WeatherCategory (data class)
+│   ├── dto/               # WeatherInfo, OpenMeteoResponse, WeatherCategory (data class)
 │   ├── service/           # WeatherService (RestClient)
 │   └── controller/
 ├── vision/
-│   ├── record/            # VisionAnalysis (data class)
+│   ├── dto/               # VisionAnalysis (data class)
 │   ├── service/           # VisionAnalysisService (멀티모달 ChatClient)
 │   └── controller/
-└── marketing/
-    ├── record/            # MarketingContent (data class)
-    ├── service/           # MarketingTextService (PromptTemplate)
+├── marketing/
+│   ├── dto/               # MarketingContent (data class)
+│   ├── service/           # MarketingTextService (PromptTemplate)
+│   └── controller/
+└── system/
+    ├── dto/                # GpuStatus, SystemStatusResponse (data class)
+    ├── service/           # SystemStatusService (코루틴 기반 디스크/GPU 동시 조회)
     └── controller/
 ```
 
