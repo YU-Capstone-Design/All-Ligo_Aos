@@ -1,8 +1,8 @@
 package com.example.allligo_aos.weather.service
 
-import com.example.allligo_aos.weather.record.OpenMeteoResponse
-import com.example.allligo_aos.weather.record.WeatherCategory
-import com.example.allligo_aos.weather.record.WeatherInfo
+import com.example.allligo_aos.weather.dto.OpenMeteoResponse
+import com.example.allligo_aos.weather.dto.WeatherCategory
+import com.example.allligo_aos.weather.dto.WeatherInfo
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClient
 import org.springframework.web.client.requiredBody

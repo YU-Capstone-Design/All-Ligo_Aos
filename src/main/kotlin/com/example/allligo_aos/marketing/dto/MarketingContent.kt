@@ -1,4 +1,4 @@
-package com.example.allligo_aos.marketing.record
+package com.example.allligo_aos.marketing.dto
 
 // Java의 record와 정확히 대응되는 개념
 data class MarketingContent(

@@ -1,4 +1,4 @@
-package com.example.allligo_aos.weather.record
+package com.example.allligo_aos.weather.dto
 
 data class WeatherInfo(
     val weatherDesc: String, // 날씨 상태를 한글로 표현(가공값)

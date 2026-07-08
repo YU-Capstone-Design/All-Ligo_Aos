@@ -1,4 +1,4 @@
-package com.example.allligo_aos.weather.record
+package com.example.allligo_aos.weather.dto
 
 import com.fasterxml.jackson.annotation.JsonProperty
 

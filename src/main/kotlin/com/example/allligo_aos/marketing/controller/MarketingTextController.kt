@@ -1,8 +1,8 @@
 package com.example.allligo_aos.marketing.controller
 
 import com.example.allligo_aos.marketing.service.MarketingTextService
-import com.example.allligo_aos.vision.record.VisionAnalysis
-import com.example.allligo_aos.weather.record.WeatherInfo
+import com.example.allligo_aos.vision.dto.VisionAnalysis
+import com.example.allligo_aos.weather.dto.WeatherInfo
 import com.example.allligo_aos.weather.service.WeatherService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping

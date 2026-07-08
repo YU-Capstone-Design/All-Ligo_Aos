@@ -1,4 +1,4 @@
-package com.example.allligo_aos.vision.record
+package com.example.allligo_aos.vision.dto
 
 data class VisionAnalysis(
     val objects: List<String>,

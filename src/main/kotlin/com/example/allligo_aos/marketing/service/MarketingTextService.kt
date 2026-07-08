@@ -1,8 +1,8 @@
 package com.example.allligo_aos.marketing.service
 
-import com.example.allligo_aos.marketing.record.MarketingContent
-import com.example.allligo_aos.vision.record.VisionAnalysis
-import com.example.allligo_aos.weather.record.WeatherInfo
+import com.example.allligo_aos.marketing.dto.MarketingContent
+import com.example.allligo_aos.vision.dto.VisionAnalysis
+import com.example.allligo_aos.weather.dto.WeatherInfo
 import org.springframework.ai.chat.client.ChatClient
 import org.springframework.stereotype.Service
 

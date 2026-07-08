@@ -1,4 +1,4 @@
-package com.example.allligo_aos.weather.record
+package com.example.allligo_aos.weather.dto
 
 /**
  * 날씨 카테고리

@@ -1,6 +1,6 @@
 package com.example.allligo_aos.vision.service
 
-import com.example.allligo_aos.vision.record.VisionAnalysis
+import com.example.allligo_aos.vision.dto.VisionAnalysis
 import org.springframework.ai.chat.client.ChatClient
 import org.springframework.ai.ollama.api.OllamaChatOptions
 import org.springframework.stereotype.Service
