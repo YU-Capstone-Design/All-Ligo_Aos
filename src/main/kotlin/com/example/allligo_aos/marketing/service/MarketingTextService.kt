@@ -7,8 +7,10 @@ import org.springframework.ai.chat.client.ChatClient
 import org.springframework.stereotype.Service
 
 @Service
+// 이때 파라미터 내부에 들어가는 chatClientBuilder는 필드가 아님. val같은것도 없으며 생성자 실행중에 잠깐 쓰이는 지역변수로 취급하기
 class MarketingTextService(chatClientBuilder: ChatClient.Builder) {
 
+    // 진짜로 그 정보를 저장해둘 필드는 여기임. 여기다가 아까 임시변수 가져와서 빌드 하고 저장
     private val chatClient: ChatClient = chatClientBuilder.build()
 
     /**
@@ -19,13 +21,18 @@ class MarketingTextService(chatClientBuilder: ChatClient.Builder) {
      */
     private fun buildWeatherContext(weather: WeatherInfo): String {
         // 날씨 정보를 가져왔을때 1이면 낮, null이거나 0이면 밤
+        // 삼항 연산자를 쓸 수 없는 대신에 if else를 한줄로 가능
         val isDayStr = if (weather.isDay == 1) "낮" else "밤"
 
+        // 스트링 빌더 대신 buildString{} 으로 바로 가능
+        // 또는 val sb = StringBuilder() 로도 가능
         return buildString {
+            // 템플릿 엔진처럼 문자열 끼워넣기 가능
             append("현재 위치의 날씨는 '${weather.weatherDesc}'이며, 기온은 ${weather.temperature}도(체감 ${weather.apparentTemperature}도)입니다. ")
             append("현재 시간대는 ${isDayStr}이며, 습도는 ${weather.humidity}%, 풍속은 ${weather.windSpeed}m/s입니다. ")
 
             // 비가 올 경우
+            // 빌드 스트링 도중에 조건문 사용 가능
             if (weather.precipitation != null && weather.precipitation > 0) {
                 append("현재 강수량은 ${weather.precipitation} mm로 비나 눈이 내리고 있습니다. ")
             }
@@ -34,19 +41,22 @@ class MarketingTextService(chatClientBuilder: ChatClient.Builder) {
         }
     }
 
+    /**
+     * 시각 정보 컨텍스트 문자열 생성
+     */
     private fun buildVisionContext(vision: VisionAnalysis?): String {
         if (vision == null) {
             return ""
         }
 
-        // 각각 리스트로 받으므로 저 구분자를 통해 원소를 연속해서 받아 하나의 문자열로 주입함
+        // 각각 리스트 자료형으로 받으므로 저 구분자를 통해 원소를 연속해서 받아 하나의 문자열로 합침
         return """
                 - 주요 객체: ${vision.objects.joinToString(", ")}
                 - 분위기: ${vision.mood.joinToString(", ")}
                 - 주요 색상: ${vision.colors.joinToString(", ")}
                 이 분석 결과를 바탕으로 새로운 마케팅 텍스트를 작성하세요.
 
-                """.trimIndent()
+                """.trimIndent() // 앞뒤 공백 제거 + 여러 줄 문자열의 공통으로 붙은 들여쓰기 제거(Java에서의 stripIndent())
     }
 
     /**
@@ -58,10 +68,12 @@ class MarketingTextService(chatClientBuilder: ChatClient.Builder) {
      * @return 우수 게시물 프롬프트 작성
      */
     private fun buildPerformersContext(topPerformersContext: String?): String {
+        // null과 empty여부를 한번에 확인 가능. or연산
         if (topPerformersContext.isNullOrEmpty()) {
             return ""
         }
 
+        // 변수 하나 단독으로 표현식이 들어가지 않을 경우 $만 붙임. 객체처럼 표현식으로 접근할때는 ${}
         return """
             $topPerformersContext
 
@@ -128,6 +140,7 @@ class MarketingTextService(chatClientBuilder: ChatClient.Builder) {
             (여기에 순수 홍보 텍스트만 작성)
             """.trimIndent()
 
+        // 이건 Java에서 stream형으로 쓴거랑 완벽히 동일함
         return chatClient.prompt()
             // 위에 쓴 템플릿에 변수명이 동일한 파라미터들 전달하여 삽입
             .user { u ->

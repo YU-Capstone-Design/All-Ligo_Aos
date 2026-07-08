@@ -10,6 +10,7 @@ class OpenApiConfig {
 
     @Bean
     fun allLigoOpenApi(): OpenAPI {
+        // 클래스() 자체가 생성자 호출이라 자바와 다르게 new 키워드를 쓰지 않고 호출
         return OpenAPI()
             .info(
                 Info()

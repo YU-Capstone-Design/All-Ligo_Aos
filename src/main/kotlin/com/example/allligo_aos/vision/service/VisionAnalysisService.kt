@@ -41,6 +41,7 @@ class VisionAnalysisService(chatClientBuilder: ChatClient.Builder) {
             .call()
             .content()
 
+        // 로텍스트를 반환하되, null일 경우에 빈 문자열 반환. 왼쪽이 null이면 오른쪽 값을 쓰는 것.
         return parseVisionAnalysis(rawText ?: "")
     }
 
@@ -51,13 +52,17 @@ class VisionAnalysisService(chatClientBuilder: ChatClient.Builder) {
      * @return 정제된 비전 분석 결과
      */
     private fun parseVisionAnalysis(text: String): VisionAnalysis {
+        // 빈 리스트 할당
         var objects: List<String> = emptyList()
         var mood: List<String> = emptyList()
         var colors: List<String> = emptyList()
 
+        // 줄바꿈 기준으로 가져오기. for-each
         for (line in text.split("\n")) {
             val trimmedLine = line.trim()
             when {
+                // when 문으로 if-else를 표현. 화살표로 조건 이후 실행을 적음
+                // 앞에 있는 문자열부분을 제거하는 메소드가 별도로 존재
                 trimmedLine.startsWith("Objects:") -> objects = splitList(trimmedLine.removePrefix("Objects:"))
                 trimmedLine.startsWith("Mood:") -> mood = splitList(trimmedLine.removePrefix("Mood:"))
                 trimmedLine.startsWith("Colors:") -> colors = splitList(trimmedLine.removePrefix("Colors:"))
@@ -67,8 +72,9 @@ class VisionAnalysisService(chatClientBuilder: ChatClient.Builder) {
     }
 
     private fun splitList(raw: String): List<String> {
-        return raw.split(",")
-            .map { it.trim() }
-            .filter { it.isNotEmpty() }
+        // 스트림 활용방식이 조금 다른데 이건 이후에 교재로 공부할것.
+        return raw.split(",") // 쉼표 구분자로 나누기
+            .map { it.trim() } // 앞뒤 공백 제거
+            .filter { it.isNotEmpty() } // 빈 문자열이 아닌거만 필터링
     }
 }

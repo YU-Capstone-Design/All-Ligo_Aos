@@ -41,7 +41,7 @@ class WeatherService(restClientBuilder: RestClient.Builder) {
                     .build()
             }
             .retrieve() // 전송하기
-            .requiredBody<OpenMeteoResponse>() // 응답을 어떤 코틀린 객체로 변환할지 설정
+            .requiredBody<OpenMeteoResponse>() // 응답을 어떤 코틀린 객체로 변환할지 설정, 클래스 불러오는 방법의 차이
 
         // 응답에서 실제 데이터가 들어있는 current 부분만 꺼내서 저장
         val current = response.current
@@ -64,6 +64,8 @@ class WeatherService(restClientBuilder: RestClient.Builder) {
 
     /**
      * 날씨 코드와 카테고리 매핑
+     *
+     * when을 통한 간략한 코드로 변경됨 확인
      *
      * @param weatherCode 날씨코드
      * @return 카테고리 객체 반환

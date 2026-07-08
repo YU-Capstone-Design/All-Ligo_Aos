@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/marketing")
+// 마찬가지로 클래스의 파라미터로 들어가는건 생성자의 파라미터들임. 기존에 멤버필드로 만들었던걸 여기에다가 넣음.
+// Kotlin에서는 이 한줄에서 멤버필드를 선언하고 즉시 생성자로써 초기화까지 해주는 역할까지 수행함.
+// 필드 선언 + 생성자 파라미터 + 초기화
 class MarketingTextController(
-    private val weatherService: WeatherService,
+    private val weatherService: WeatherService, // private final를 private val로 씀
     private val marketingTextService: MarketingTextService
 ) {
 
@@ -32,7 +35,7 @@ class MarketingTextController(
      */
     @GetMapping("/generate-text")
     fun generateText(
-        @RequestParam latitude: Double,
+        @RequestParam latitude: Double, // Kotlin의 Double형
         @RequestParam longitude: Double,
         @RequestParam(required = false, defaultValue = "") topPerformersContext: String,
         @RequestParam moodTag: String,
@@ -58,7 +61,7 @@ class MarketingTextController(
 
         // TEMP-TEST: 더미 비전 분석 결과
         val dummyVision = VisionAnalysis(
-            listOf("coffee", "croissant", "wooden table"),
+            listOf("coffee", "croissant", "wooden table"), // Java List.of -> Kotlin listOf
             listOf("cozy", "warm", "inviting"),
             listOf("brown", "cream", "white")
         )
