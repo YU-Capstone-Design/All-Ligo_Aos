@@ -35,6 +35,10 @@ dependencies {
     // 코루틴 의존성
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.10.1")
+
+    // AWS 의존성 추가
+    implementation(platform("software.amazon.awssdk:bom:2.29.9"))
+    implementation("software.amazon.awssdk:s3")
 }
 
 dependencyManagement {
