@@ -11,3 +11,13 @@ spring:
 
 server:
   port: 8083
+
+worker:
+  base-url: http://localhost:8000
+
+
+aws:
+  region: ap-northeast-2
+  s3:
+    bucket: ${AWS_S3_BUCKET:}
+    base-url: ${AWS_S3_BASE_URL:}
