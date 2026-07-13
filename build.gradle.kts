@@ -23,7 +23,7 @@ extra["springAiVersion"] = "2.0.0"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-webmvc")
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.3")
     implementation("org.springframework.ai:spring-ai-starter-model-ollama")
     implementation("org.springframework.ai:spring-ai-vector-store-advisor")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -33,12 +33,17 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
     // 코루틴 의존성
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.10.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.11.0")
 
     // AWS 의존성 추가
-    implementation(platform("software.amazon.awssdk:bom:2.29.9"))
+    implementation(platform("software.amazon.awssdk:bom:2.47.4"))
     implementation("software.amazon.awssdk:s3")
+
+    // 구글 API
+    implementation("com.google.api-client:google-api-client:2.9.0")
+    implementation("com.google.apis:google-api-services-youtube:v3-rev20260608-2.0.0")
+    implementation("com.google.http-client:google-http-client-gson:2.1.0")
 }
 
 dependencyManagement {
