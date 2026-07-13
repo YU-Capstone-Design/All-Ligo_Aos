@@ -21,3 +21,7 @@ aws:
   s3:
     bucket: ${AWS_S3_BUCKET:}
     base-url: ${AWS_S3_BASE_URL:}
+
+
+youtube:
+  token-path: credentials/token.json
